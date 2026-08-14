@@ -1,9 +1,42 @@
-<!-- BEGIN:nextjs-agent-rules -->
+# AI Development Instructions
 
-# This is NOT the Next.js you know
+## Package management
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+- Use **pnpm** for all dependency and script commands.
+- Respect the version declared in `package.json` under `packageManager`.
+- Use `pnpm install`, `pnpm add`, `pnpm remove`, and `pnpm run <script>`.
+- Do not use npm, Yarn, or Bun, and do not create their lockfiles.
+- Keep `pnpm-lock.yaml` in sync whenever dependencies change.
+- Prefer existing package scripts over invoking tools directly.
 
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+## Language, direction, and typography
 
-<!-- END:nextjs-agent-rules -->
+- Treat Persian (`fa`) as the default website language and write default user-facing copy in Persian.
+- Keep the root document configured with `lang="fa"` and `dir="rtl"`.
+- Use Yekan Bakh FaNum as the default sans-serif font through `next/font/local` and the `--font-yekan-bakh` CSS variable.
+- Apply the `font-english-numbers` class when an element should use Yekan Bakh with English digit glyphs. The class changes the font variant only; add an explicit `dir="ltr"` separately when the content direction also needs to be left-to-right.
+- Use the provided Yekan Bakh weight files instead of relying on synthetic browser weights.
+- Build RTL-first layouts. Prefer logical properties and direction-aware Tailwind utilities such as `start`, `end`, `ms`, `me`, `ps`, and `pe` over physical left/right equivalents.
+- Add bidirectional overrides only for content that is inherently left-to-right, such as code, email addresses, and some numeric identifiers.
+
+## Brand and storefront
+
+- Treat fashion photography as product content: preserve the complete campaign image in the homepage hero and avoid placing text over people or important garment details.
+- Use the shared `BrandLogo`, `SiteHeader`, and `SiteFooter` components so the Safe Zone identity stays consistent across routes.
+- Keep primary navigation route-based. Product categories belong in the top menu; company information belongs on dedicated pages rather than homepage scroll links.
+- Keep the visual language minimal and editorial: generous whitespace, quiet typography, restrained cream/black surfaces, and orange only as an accent.
+- Keep catalog content and product variants centralized in `app/lib/products.ts`.
+- Product purchase pages should guide one decision at a time, keep the selected product image visible on large screens, and provide clear color, size, fulfillment, and order-summary states.
+- Add products through the shared cart provider so the header count, persistent cart page, quantities, and totals stay synchronized.
+- Do not imitate Apple trademarks or product visuals; borrow only broad interaction principles such as clarity, progressive disclosure, sticky context, and focused choices.
+
+## Working practices
+
+- Inspect the existing code and configuration before making changes.
+- Make focused changes that match the current Next.js, React, and TypeScript conventions.
+- Preserve strict type safety; do not introduce `any` or suppress errors without a documented reason.
+- Prefer Server Components by default. Add `"use client"` only when browser APIs, state, effects, or event handlers require it.
+- Reuse existing styles and patterns before introducing new abstractions or dependencies.
+- Never expose secrets in source code or commit environment files containing credentials.
+- Run the relevant checks after changes. At minimum, use `pnpm run lint` and `pnpm run format:check`; use `pnpm run build` when the change can affect compilation or production behavior.
+- Do not modify generated files such as `next-env.d.ts` or files under `.next/`.

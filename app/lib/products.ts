@@ -1,146 +1,183 @@
-export type Locale = "fa" | "en";
-
-type Localized = Record<Locale, string>;
-
 export type ProductColor = {
   id: string;
-  label: Localized;
-  hex: string;
+  name: string;
+  swatch: string;
   image: string;
+  imageAlt: string;
+  imagePosition: string;
 };
 
 export type Product = {
   slug: string;
-  kind: "top" | "bottom" | "layer";
-  name: Localized;
-  shortName: Localized;
-  eyebrow: Localized;
-  description: Localized;
-  price: Localized;
-  numericPrice: number;
-  image: string;
-  secondaryImage: string;
+  name: string;
+  shortName: string;
+  category: string;
+  categoryId: "tshirts" | "trousers" | "knitwear" | "sneakers" | "shorts";
+  tagline: string;
+  description: string;
+  price: number;
+  badge?: string;
+  coverImage: string;
+  coverAlt: string;
+  coverPosition: string;
   colors: ProductColor[];
   sizes: string[];
-  fits: Array<{ id: string; label: Localized; detail: Localized }>;
-  material: Localized;
-  care: Localized;
-  featureTitle: Localized;
-  featureText: Localized;
+  features: Array<{
+    title: string;
+    description: string;
+  }>;
 };
 
 export const products: Product[] = [
   {
-    slug: "stone-oversized-tee",
-    kind: "top",
-    name: { fa: "تی‌شرت اورسایز سنگی", en: "Stone oversized tee" },
-    shortName: { fa: "تی‌شرت سنگی", en: "Stone tee" },
-    eyebrow: { fa: "هوی وِیت / دراپ ۰۱", en: "HEAVYWEIGHT / DROP 01" },
-    description: {
-      fa: "یک تی‌شرت روزمره با پارچه‌ی سنگین، سرشانه‌ی افتاده و فرمی که بدون تلاش درست می‌ایستد.",
-      en: "An everyday tee in substantial cotton, with a dropped shoulder and an easy shape that simply falls right.",
-    },
-    price: { fa: "۱٬۴۸۰٬۰۰۰ تومان", en: "1,480,000 Toman" },
-    numericPrice: 1480000,
-    image: "/product-stone-tee.jpg",
-    secondaryImage: "/category-tshirts.jpg",
+    slug: "essential-oversized-tee",
+    name: "تی‌شرت اورسایز Essential",
+    shortName: "Essential Tee",
+    category: "تی‌شرت",
+    categoryId: "tshirts",
+    tagline: "آزاد، متعادل و ساخته‌شده برای هر روز.",
+    description:
+      "یک تی‌شرت با فرم آزاد و خط شانه افتاده که به‌تنهایی یا در ترکیب با لایه‌های دیگر، ساده و دقیق می‌ایستد.",
+    price: 1_890_000,
+    badge: "جدید",
+    coverImage: "/oversized-black-tee.png",
+    coverAlt: "تی‌شرت اورسایز مشکی Essential سیف زون",
+    coverPosition: "object-[50%_22%]",
     colors: [
-      { id: "stone", label: { fa: "سنگی", en: "Stone" }, hex: "#b7aa98", image: "/product-stone-tee.jpg" },
-      { id: "charcoal", label: { fa: "ذغالی", en: "Charcoal" }, hex: "#292927", image: "/product-charcoal-tee.jpg" },
-      { id: "ivory", label: { fa: "شیری", en: "Ivory" }, hex: "#e9e0d0", image: "/category-tshirts.jpg" },
-    ],
-    sizes: ["XS", "S", "M", "L", "XL"],
-    fits: [
-      { id: "regular", label: { fa: "آزاد", en: "Relaxed" }, detail: { fa: "اندازه‌ی معمولت را بردار", en: "Choose your usual size" } },
-      { id: "oversized", label: { fa: "خیلی اورسایز", en: "Extra oversized" }, detail: { fa: "یک سایز بزرگ‌تر", en: "Go one size up" } },
-    ],
-    material: { fa: "۱۰۰٪ پنبه، ۲۶۰ گرم", en: "100% cotton, 260 gsm" },
-    care: { fa: "شست‌وشو با آب سرد، پشت‌ورو", en: "Cold wash, inside out" },
-    featureTitle: { fa: "وزن درست. فرم راحت.", en: "The right weight. An easy shape." },
-    featureText: {
-      fa: "یقه‌ی ریب تقویت‌شده، دوخت تمیز و پنبه‌ای که بعد از پوشیدن بهتر می‌شود.",
-      en: "A reinforced rib neck, clean construction and cotton that gets better as you live in it.",
-    },
-  },
-  {
-    slug: "black-wide-trousers",
-    kind: "bottom",
-    name: { fa: "شلوار واید مشکی", en: "Black wide trousers" },
-    shortName: { fa: "شلوار واید", en: "Wide trousers" },
-    eyebrow: { fa: "فرم آزاد / پرفروش", en: "EASY SHAPE / BESTSELLER" },
-    description: {
-      fa: "شلوار واید با پیلی عمیق، افت تمیز و کمری که از صبح تا شب راحت می‌ماند.",
-      en: "Wide trousers with a deep pleat, clean drape and a waist that stays comfortable from morning to late.",
-    },
-    price: { fa: "۲٬۶۹۰٬۰۰۰ تومان", en: "2,690,000 Toman" },
-    numericPrice: 2690000,
-    image: "/product-black-trousers.jpg",
-    secondaryImage: "/category-trousers.jpg",
-    colors: [
-      { id: "black", label: { fa: "مشکی", en: "Black" }, hex: "#171713", image: "/product-black-trousers.jpg" },
-      { id: "ink", label: { fa: "جوهر", en: "Ink" }, hex: "#30302d", image: "/category-trousers.jpg" },
-    ],
-    sizes: ["28", "30", "32", "34", "36"],
-    fits: [
-      { id: "regular", label: { fa: "واید", en: "Wide" }, detail: { fa: "فرم اصلی سیف زون", en: "The intended Safe Zone fit" } },
-      { id: "long", label: { fa: "واید بلند", en: "Wide long" }, detail: { fa: "۵ سانتی‌متر قد بیشتر", en: "5 cm extra length" } },
-    ],
-    material: { fa: "ترکیب پنبه و ویسکوز", en: "Cotton–viscose blend" },
-    care: { fa: "شست‌وشو ملایم در ۳۰ درجه", en: "Gentle wash at 30°C" },
-    featureTitle: { fa: "حرکت، بدون شلوغی.", en: "Movement, without the noise." },
-    featureText: { fa: "پیلی‌های دقیق و پارچه‌ای با افت طبیعی، برای فرمی که در حرکت زنده می‌شود.", en: "Considered pleats and naturally fluid cloth make the silhouette come alive in motion." },
-  },
-  {
-    slug: "charcoal-heavyweight-tee",
-    kind: "top",
-    name: { fa: "تی‌شرت هوی وِیت ذغالی", en: "Charcoal heavyweight tee" },
-    shortName: { fa: "تی‌شرت ذغالی", en: "Charcoal tee" },
-    eyebrow: { fa: "هوی وِیت / جدید", en: "HEAVYWEIGHT / NEW" },
-    description: { fa: "تی‌شرت ذغالی سنگین با بافت نرم و تن‌خور اورسایز کنترل‌شده.", en: "A substantial charcoal tee with a soft hand and controlled oversized fit." },
-    price: { fa: "۱٬۶۵۰٬۰۰۰ تومان", en: "1,650,000 Toman" },
-    numericPrice: 1650000,
-    image: "/product-charcoal-tee.jpg",
-    secondaryImage: "/product-stone-tee.jpg",
-    colors: [
-      { id: "charcoal", label: { fa: "ذغالی", en: "Charcoal" }, hex: "#292927", image: "/product-charcoal-tee.jpg" },
-      { id: "stone", label: { fa: "سنگی", en: "Stone" }, hex: "#b7aa98", image: "/product-stone-tee.jpg" },
-    ],
-    sizes: ["XS", "S", "M", "L", "XL"],
-    fits: [
-      { id: "regular", label: { fa: "آزاد", en: "Relaxed" }, detail: { fa: "اندازه‌ی معمولت را بردار", en: "Choose your usual size" } },
-      { id: "oversized", label: { fa: "خیلی اورسایز", en: "Extra oversized" }, detail: { fa: "یک سایز بزرگ‌تر", en: "Go one size up" } },
-    ],
-    material: { fa: "۱۰۰٪ پنبه، ۲۸۰ گرم", en: "100% cotton, 280 gsm" },
-    care: { fa: "شست‌وشو با آب سرد، پشت‌ورو", en: "Cold wash, inside out" },
-    featureTitle: { fa: "تیره، نرم، ماندگار.", en: "Dark, soft, lasting." },
-    featureText: { fa: "رنگ ذغالی شسته‌شده با بافتی که در هر بار پوشیدن شخصیت بیشتری می‌گیرد.", en: "A washed charcoal tone with texture that gains character every time you wear it." },
-  },
-  {
-    slug: "rust-knit-pullover",
-    kind: "layer",
-    name: { fa: "پلیور بافت آجری", en: "Rust knit pullover" },
-    shortName: { fa: "بافت آجری", en: "Rust knit" },
-    eyebrow: { fa: "تعداد محدود / لایه‌ی بعدی", en: "LIMITED / NEXT LAYER" },
-    description: { fa: "بافت آجری نرم با آستین‌های آزاد و فرمی که روی هر استایلی می‌نشیند.", en: "A soft rust knit with easy sleeves and a shape designed to layer over anything." },
-    price: { fa: "۲٬۹۸۰٬۰۰۰ تومان", en: "2,980,000 Toman" },
-    numericPrice: 2980000,
-    image: "/category-layers.jpg",
-    secondaryImage: "/safe-zone-hero-v2.jpg",
-    colors: [
-      { id: "rust", label: { fa: "آجری", en: "Rust" }, hex: "#b43d1d", image: "/category-layers.jpg" },
+      {
+        id: "black",
+        name: "مشکی",
+        swatch: "#171717",
+        image: "/oversized-black-tee.png",
+        imageAlt: "تی‌شرت اورسایز Essential به رنگ مشکی",
+        imagePosition: "object-[50%_22%]",
+      },
+      {
+        id: "ivory",
+        name: "استخوانی",
+        swatch: "#eee7da",
+        image: "/ivory-tee-black-trousers.png",
+        imageAlt: "تی‌شرت اورسایز Essential به رنگ استخوانی",
+        imagePosition: "object-[50%_28%]",
+      },
+      {
+        id: "stone",
+        name: "سنگی",
+        swatch: "#9f927f",
+        image: "/stone-tee-black-trousers.png",
+        imageAlt: "تی‌شرت اورسایز Essential به رنگ سنگی",
+        imagePosition: "object-[50%_24%]",
+      },
     ],
     sizes: ["S", "M", "L", "XL"],
-    fits: [
-      { id: "regular", label: { fa: "آزاد", en: "Relaxed" }, detail: { fa: "فرم اصلی بافت", en: "The intended knit shape" } },
-      { id: "oversized", label: { fa: "اورسایز", en: "Oversized" }, detail: { fa: "یک سایز بزرگ‌تر", en: "Go one size up" } },
+    features: [
+      {
+        title: "فرم آزاد",
+        description: "فضای بیشتر در تنه و آستین برای حرکت راحت و یک سیلوئت تمیز.",
+      },
+      {
+        title: "خط شانه افتاده",
+        description: "فرمی آرام که بدون حجم اضافه، ظاهر اورسایز را کامل می‌کند.",
+      },
+      {
+        title: "برای هر روز",
+        description: "طراحی ساده‌ای که با شلوار واید، جین یا لایه‌های دیگر هماهنگ می‌شود.",
+      },
     ],
-    material: { fa: "پشم و پنبه‌ی نرم", en: "Soft wool–cotton blend" },
-    care: { fa: "شست‌وشوی دستی و خشک‌کردن تخت", en: "Hand wash and dry flat" },
-    featureTitle: { fa: "گرما، با رنگ سیف زون.", en: "Warmth, in the Safe Zone colour." },
-    featureText: { fa: "بافت برجسته با نارنجی عمیق، برای روزهایی که یک لایه همه‌چیز را کامل می‌کند.", en: "A tactile knit in deep orange for days when one layer completes everything." },
+  },
+  {
+    slug: "daily-wide-trousers",
+    name: "شلوار واید Daily",
+    shortName: "Daily Wide",
+    category: "شلوار",
+    categoryId: "trousers",
+    tagline: "یک خط صاف، از کمر تا پایین.",
+    description:
+      "شلواری با برش واید و ایستایی روان که فاصله‌ی میان راحتی روزمره و ظاهر مرتب را از بین می‌برد.",
+    price: 2_490_000,
+    coverImage: "/ivory-tee-black-trousers.png",
+    coverAlt: "شلوار واید مشکی Daily سیف زون",
+    coverPosition: "object-[50%_54%]",
+    colors: [
+      {
+        id: "black",
+        name: "مشکی",
+        swatch: "#161616",
+        image: "/ivory-tee-black-trousers.png",
+        imageAlt: "شلوار واید Daily به رنگ مشکی",
+        imagePosition: "object-[50%_54%]",
+      },
+      {
+        id: "cream",
+        name: "کرم",
+        swatch: "#e7dece",
+        image: "/monochrome-duo-orange.png",
+        imageAlt: "شلوار واید Daily به رنگ کرم",
+        imagePosition: "object-[28%_52%]",
+      },
+    ],
+    sizes: ["36", "38", "40", "42", "44"],
+    features: [
+      {
+        title: "برش واید",
+        description: "خطی پیوسته و آزاد که در حرکت، فرم خود را حفظ می‌کند.",
+      },
+      {
+        title: "استایل انعطاف‌پذیر",
+        description: "از تی‌شرت ساده تا بافت و کت، بدون نیاز به ترکیب پیچیده.",
+      },
+      {
+        title: "راحتی طولانی",
+        description: "برای ساعت‌های طولانی روز و رفت‌وآمدهای شهری طراحی شده است.",
+      },
+    ],
+  },
+  {
+    slug: "ember-knit",
+    name: "پلیور بافت Ember",
+    shortName: "Ember Knit",
+    category: "بافت",
+    categoryId: "knitwear",
+    tagline: "گرمای رنگ، آرامش فرم.",
+    description:
+      "یک بافت آزاد با رنگ نارنجی عمیق؛ قطعه‌ای شاخص که باقی استایل را ساده نگه می‌دارد.",
+    price: 3_290_000,
+    badge: "منتخب",
+    coverImage: "/orange-knit-look.png",
+    coverAlt: "پلیور بافت نارنجی Ember سیف زون",
+    coverPosition: "object-[50%_22%]",
+    colors: [
+      {
+        id: "ember",
+        name: "نارنجی Ember",
+        swatch: "#b83c12",
+        image: "/orange-knit-look.png",
+        imageAlt: "پلیور بافت Ember به رنگ نارنجی",
+        imagePosition: "object-[50%_22%]",
+      },
+    ],
+    sizes: ["S/M", "L/XL"],
+    features: [
+      {
+        title: "بافت برجسته",
+        description: "سطحی با عمق بصری که در عین سادگی، شخصیت خودش را دارد.",
+      },
+      {
+        title: "حجم کنترل‌شده",
+        description: "آستین و تنه آزاد با تناسبی که همچنان مرتب دیده می‌شود.",
+      },
+      {
+        title: "رنگ شاخص",
+        description: "نارنجی گرم برای ترکیب با مشکی، کرم و رنگ‌های خنثی.",
+      },
+    ],
   },
 ];
 
 export function getProduct(slug: string) {
   return products.find((product) => product.slug === slug);
+}
+
+export function formatPrice(price: number) {
+  return `${new Intl.NumberFormat("fa-IR").format(price)} تومان`;
 }

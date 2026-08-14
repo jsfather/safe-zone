@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { BrandLogo } from "./brand-logo";
 import { useCart } from "./cart-provider";
+import { ShopCategoryLink } from "./shop-category-navigation";
 
 export function SiteHeader() {
   const { itemCount } = useCart();
@@ -21,18 +22,26 @@ export function SiteHeader() {
           <Link className="transition-colors hover:text-ink" href="/shop">
             فروشگاه
           </Link>
-          <Link className="transition-colors hover:text-ink" href="/shop?category=tshirts">
-            تی‌شرت‌ها
-          </Link>
-          <Link className="transition-colors hover:text-ink" href="/shop?category=trousers">
-            شلوارها
-          </Link>
-          <Link className="transition-colors hover:text-ink" href="/shop?category=sneakers">
-            کتانی‌ها
-          </Link>
-          <Link className="transition-colors hover:text-ink" href="/shop?category=shorts">
-            شلوارک‌ها
-          </Link>
+          <ShopCategoryLink
+            categoryId="tshirts"
+            label="تی‌شرت‌ها"
+            className="transition-colors hover:text-ink"
+          />
+          <ShopCategoryLink
+            categoryId="trousers"
+            label="شلوارها"
+            className="transition-colors hover:text-ink"
+          />
+          <ShopCategoryLink
+            categoryId="sneakers"
+            label="کتانی‌ها"
+            className="transition-colors hover:text-ink"
+          />
+          <ShopCategoryLink
+            categoryId="shorts"
+            label="شلوارک‌ها"
+            className="transition-colors hover:text-ink"
+          />
         </div>
 
         <div className="flex items-center gap-3">
@@ -51,18 +60,26 @@ export function SiteHeader() {
         </div>
       </nav>
       <div className="grid h-10 grid-cols-4 border-t border-black/5 px-2 text-center text-[11px] text-ink/55 md:hidden">
-        <Link className="grid place-items-center" href="/shop?category=tshirts">
-          تی‌شرت‌ها
-        </Link>
-        <Link className="grid place-items-center" href="/shop?category=trousers">
-          شلوارها
-        </Link>
-        <Link className="grid place-items-center" href="/shop?category=sneakers">
-          کتانی‌ها
-        </Link>
-        <Link className="grid place-items-center" href="/shop?category=shorts">
-          شلوارک‌ها
-        </Link>
+        <ShopCategoryLink
+          categoryId="tshirts"
+          label="تی‌شرت‌ها"
+          className="grid place-items-center"
+        />
+        <ShopCategoryLink
+          categoryId="trousers"
+          label="شلوارها"
+          className="grid place-items-center"
+        />
+        <ShopCategoryLink
+          categoryId="sneakers"
+          label="کتانی‌ها"
+          className="grid place-items-center"
+        />
+        <ShopCategoryLink
+          categoryId="shorts"
+          label="شلوارک‌ها"
+          className="grid place-items-center"
+        />
       </div>
     </header>
   );

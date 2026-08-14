@@ -14,6 +14,7 @@
 - Treat Persian (`fa`) as the default website language and write default user-facing copy in Persian.
 - Keep the root document configured with `lang="fa"` and `dir="rtl"`.
 - Use Yekan Bakh FaNum as the default sans-serif font through `next/font/local` and the `--font-yekan-bakh` CSS variable.
+- Apply the `font-english-numbers` class when an element should use Yekan Bakh with English digit glyphs. The class changes the font variant only; add an explicit `dir="ltr"` separately when the content direction also needs to be left-to-right.
 - Use the provided Yekan Bakh weight files instead of relying on synthetic browser weights.
 - Build RTL-first layouts. Prefer logical properties and direction-aware Tailwind utilities such as `start`, `end`, `ms`, `me`, `ps`, and `pe` over physical left/right equivalents.
 - Add bidirectional overrides only for content that is inherently left-to-right, such as code, email addresses, and some numeric identifiers.

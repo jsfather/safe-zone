@@ -23,3 +23,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-yekan-bakh), Tahoma, Arial, sans-serif;
 }
+
+.font-english-numbers {
+  font-family: var(--font-yekan-bakh-fa-en), Tahoma, Arial, sans-serif;
+}

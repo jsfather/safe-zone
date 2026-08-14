@@ -52,6 +52,51 @@ const yekanBakh = localFont({
   adjustFontFallback: "Arial",
 });
 
+const yekanBakhFaEn = localFont({
+  src: [
+    {
+      path: "./fonts/yekan-bakh/yekan-bakh-fa-en-hairline.ttf",
+      weight: "100",
+      style: "normal",
+    },
+    {
+      path: "./fonts/yekan-bakh/yekan-bakh-fa-en-thin.ttf",
+      weight: "200",
+      style: "normal",
+    },
+    {
+      path: "./fonts/yekan-bakh/yekan-bakh-fa-en-light.ttf",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "./fonts/yekan-bakh/yekan-bakh-fa-en-regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./fonts/yekan-bakh/yekan-bakh-fa-en-bold.ttf",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "./fonts/yekan-bakh/yekan-bakh-fa-en-heavy.ttf",
+      weight: "800",
+      style: "normal",
+    },
+    {
+      path: "./fonts/yekan-bakh/yekan-bakh-fa-en-fat.ttf",
+      weight: "900",
+      style: "normal",
+    },
+  ],
+  variable: "--font-yekan-bakh-fa-en",
+  display: "swap",
+  preload: false,
+  fallback: ["Tahoma", "Arial", "sans-serif"],
+  adjustFontFallback: "Arial",
+});
+
 export const metadata: Metadata = {
   title: "سیف زون",
   description: "وب‌سایت سیف زون",
@@ -59,7 +104,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="fa" dir="rtl" className={`${yekanBakh.variable} h-full antialiased`}>
+    <html
+      lang="fa"
+      dir="rtl"
+      className={`${yekanBakh.variable} ${yekanBakhFaEn.variable} h-full antialiased`}
+    >
       <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );

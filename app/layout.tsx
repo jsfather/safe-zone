@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { CartProvider } from "./components/cart-provider";
 import "./globals.css";
 
 const yekanBakh = localFont({
@@ -98,8 +99,11 @@ const yekanBakhFaEn = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "سیف زون",
-  description: "وب‌سایت سیف زون",
+  title: {
+    default: "سیف زون | پوشاک روزمره مینیمال",
+    template: "%s | سیف زون",
+  },
+  description: "فروشگاه آنلاین بوتیک سیف زون؛ پوشاک مینیمال، راحت و مناسب هر روز.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -109,7 +113,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       dir="rtl"
       className={`${yekanBakh.variable} ${yekanBakhFaEn.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <CartProvider>{children}</CartProvider>
+      </body>
     </html>
   );
 }

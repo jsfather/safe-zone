@@ -1,0 +1,15 @@
+# Dependencies and generated output
+node_modules/
+.next/
+out/
+build/
+coverage/
+
+# Generated files
+next-env.d.ts
+pnpm-lock.yaml
+
+# Static assets
+public/*.ico
+public/*.png
+public/*.svg

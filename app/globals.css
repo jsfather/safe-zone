@@ -57,8 +57,8 @@ body {
 }
 
 .product-render__texture {
-  filter: grayscale(1);
-  mix-blend-mode: luminosity;
+  filter: grayscale(1) contrast(1.15) brightness(1.08);
+  mix-blend-mode: multiply;
   pointer-events: none;
 }
 

@@ -18,6 +18,7 @@ export type Product = {
   badge?: string;
   renderImage: string;
   renderAlt: string;
+  defaultColorId: string;
   colors: readonly ProductColor[];
   sizes: readonly string[];
   features: ReadonlyArray<{
@@ -166,6 +167,8 @@ function createCategoryProducts(
 
   return seeds.map((seed) => {
     const { palette, ...product } = seed;
+    const colors = palettes[palette];
+    const defaultColor = colors[getStableColorIndex(seed.slug, colors.length)];
 
     return {
       ...product,
@@ -174,11 +177,22 @@ function createCategoryProducts(
       description: `${seed.tagline} ${details.description}`,
       renderImage: `/products/${details.directory}/${seed.slug}.png`,
       renderAlt: `${seed.name} سیف زون`,
-      colors: palettes[palette],
+      defaultColorId: defaultColor.id,
+      colors,
       sizes: details.sizes,
       features: details.features,
     };
   });
+}
+
+function getStableColorIndex(value: string, colorCount: number) {
+  let hash = 0;
+
+  for (const character of value) {
+    hash = (hash * 31 + character.charCodeAt(0)) >>> 0;
+  }
+
+  return hash % colorCount;
 }
 
 const tshirts = createCategoryProducts("tshirts", [
@@ -525,6 +539,10 @@ export const products: Product[] = [...tshirts, ...trousers, ...sneakers, ...sho
 
 export function getProduct(slug: string) {
   return products.find((product) => product.slug === slug);
+}
+
+export function getDefaultProductColor(product: Product) {
+  return product.colors.find((color) => color.id === product.defaultColorId) ?? product.colors[0];
 }
 
 export function formatPrice(price: number) {

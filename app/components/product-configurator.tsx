@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { formatPrice, type Product } from "../lib/products";
+import { formatPrice, getDefaultProductColor, type Product } from "../lib/products";
 import { useCart } from "./cart-provider";
 import { ProductRender } from "./product-render";
 
@@ -11,13 +11,14 @@ type ProductConfiguratorProps = {
 
 export function ProductConfigurator({ product }: ProductConfiguratorProps) {
   const { addItem } = useCart();
-  const [selectedColorId, setSelectedColorId] = useState(product.colors[0].id);
+  const defaultColor = getDefaultProductColor(product);
+  const [selectedColorId, setSelectedColorId] = useState(defaultColor.id);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [fulfillment, setFulfillment] = useState<"delivery" | "pickup">("delivery");
   const [added, setAdded] = useState(false);
 
   const selectedColor =
-    product.colors.find((color) => color.id === selectedColorId) ?? product.colors[0];
+    product.colors.find((color) => color.id === selectedColorId) ?? defaultColor;
 
   function resetConfirmation() {
     setAdded(false);

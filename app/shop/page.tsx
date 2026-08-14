@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ProductRender } from "../components/product-render";
 import { SiteFooter } from "../components/site-footer";
 import { SiteHeader } from "../components/site-header";
-import { formatPrice, products } from "../lib/products";
+import { formatPrice, getDefaultProductColor, products } from "../lib/products";
 
 export const metadata: Metadata = {
   title: "فروشگاه",
@@ -91,7 +91,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                       <ProductRender
                         src={product.renderImage}
                         alt={product.renderAlt}
-                        color={product.colors[0].swatch}
+                        color={getDefaultProductColor(product).swatch}
                         sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                         className="transition-transform duration-700 ease-out group-hover:scale-[1.025]"
                       />

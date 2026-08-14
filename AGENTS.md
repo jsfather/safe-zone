@@ -9,6 +9,15 @@
 - Keep `pnpm-lock.yaml` in sync whenever dependencies change.
 - Prefer existing package scripts over invoking tools directly.
 
+## Language, direction, and typography
+
+- Treat Persian (`fa`) as the default website language and write default user-facing copy in Persian.
+- Keep the root document configured with `lang="fa"` and `dir="rtl"`.
+- Use Yekan Bakh FaNum as the default sans-serif font through `next/font/local` and the `--font-yekan-bakh` CSS variable.
+- Use the provided Yekan Bakh weight files instead of relying on synthetic browser weights.
+- Build RTL-first layouts. Prefer logical properties and direction-aware Tailwind utilities such as `start`, `end`, `ms`, `me`, `ps`, and `pe` over physical left/right equivalents.
+- Add bidirectional overrides only for content that is inherently left-to-right, such as code, email addresses, and some numeric identifiers.
+
 ## Working practices
 
 - Inspect the existing code and configuration before making changes.

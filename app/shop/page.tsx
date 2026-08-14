@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { ProductRender } from "../components/product-render";
 import { SiteFooter } from "../components/site-footer";
 import { SiteHeader } from "../components/site-header";
 import { formatPrice, products } from "../lib/products";
 
 export const metadata: Metadata = {
   title: "فروشگاه",
-  description: "کالکشن آنلاین سیف زون؛ تی‌شرت، شلوار و بافت‌های مینیمال برای هر روز.",
+  description: "کالکشن آنلاین سیف زون؛ تی‌شرت، شلوار، کتانی و شلوارک‌های مینیمال.",
 };
 
 const categoryOptions = [
@@ -87,12 +88,12 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                 <article key={product.slug} className="group">
                   <Link href={`/shop/${product.slug}`} className="block">
                     <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] bg-[#e9e5de] md:rounded-[34px]">
-                      <Image
-                        src={product.coverImage}
-                        alt={product.coverAlt}
-                        fill
+                      <ProductRender
+                        src={product.renderImage}
+                        alt={product.renderAlt}
+                        color={product.colors[0].swatch}
                         sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                        className={`object-cover transition-transform duration-700 ease-out group-hover:scale-[1.025] ${product.coverPosition}`}
+                        className="transition-transform duration-700 ease-out group-hover:scale-[1.025]"
                       />
                       {product.badge && (
                         <span className="absolute top-5 right-5 rounded-full bg-canvas/90 px-3 py-1.5 text-xs font-medium text-accent backdrop-blur">

@@ -1,10 +1,9 @@
+export type ProductCategoryId = "tshirts" | "trousers" | "sneakers" | "shorts";
+
 export type ProductColor = {
   id: string;
   name: string;
   swatch: string;
-  image: string;
-  imageAlt: string;
-  imagePosition: string;
 };
 
 export type Product = {
@@ -12,167 +11,517 @@ export type Product = {
   name: string;
   shortName: string;
   category: string;
-  categoryId: "tshirts" | "trousers" | "knitwear" | "sneakers" | "shorts";
+  categoryId: ProductCategoryId;
   tagline: string;
   description: string;
   price: number;
   badge?: string;
-  coverImage: string;
-  coverAlt: string;
-  coverPosition: string;
-  colors: ProductColor[];
-  sizes: string[];
-  features: Array<{
+  renderImage: string;
+  renderAlt: string;
+  colors: readonly ProductColor[];
+  sizes: readonly string[];
+  features: ReadonlyArray<{
     title: string;
     description: string;
   }>;
 };
 
-export const products: Product[] = [
+type PaletteId = "core" | "earth" | "cool" | "sport" | "summer";
+
+type ProductSeed = {
+  slug: string;
+  name: string;
+  shortName: string;
+  tagline: string;
+  price: number;
+  palette: PaletteId;
+  badge?: string;
+};
+
+const palettes: Record<PaletteId, readonly ProductColor[]> = {
+  core: [
+    { id: "black", name: "مشکی", swatch: "#171717" },
+    { id: "ivory", name: "استخوانی", swatch: "#E9E2D6" },
+    { id: "stone", name: "سنگی", swatch: "#8A8175" },
+    { id: "clay", name: "رسی", swatch: "#A85C3A" },
+  ],
+  earth: [
+    { id: "graphite", name: "گرافیتی", swatch: "#30302E" },
+    { id: "sand", name: "شنی", swatch: "#C7B69D" },
+    { id: "olive", name: "زیتونی", swatch: "#62634D" },
+    { id: "cocoa", name: "کاکائویی", swatch: "#765747" },
+  ],
+  cool: [
+    { id: "ink", name: "جوهر مشکی", swatch: "#1B2026" },
+    { id: "fog", name: "مه‌آلود", swatch: "#C9CDD0" },
+    { id: "navy", name: "سرمه‌ای", swatch: "#29384C" },
+    { id: "sage", name: "سبز مریم‌گلی", swatch: "#879486" },
+  ],
+  sport: [
+    { id: "carbon", name: "کربنی", swatch: "#242527" },
+    { id: "chalk", name: "سفید گچی", swatch: "#ECEAE4" },
+    { id: "steel", name: "فولادی", swatch: "#727B82" },
+    { id: "signal", name: "نارنجی سیگنال", swatch: "#E25323" },
+  ],
+  summer: [
+    { id: "night", name: "شب", swatch: "#202020" },
+    { id: "oat", name: "جو دوسر", swatch: "#D8CDBB" },
+    { id: "dusty-blue", name: "آبی غبارآلود", swatch: "#71828E" },
+    { id: "brick", name: "آجری", swatch: "#A64F38" },
+  ],
+};
+
+const categoryDetails = {
+  tshirts: {
+    label: "تی‌شرت",
+    directory: "tshirts",
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    description:
+      "پارچه، خط شانه و نسبت‌های این مدل طوری تنظیم شده‌اند که در استفاده روزمره فرم تمیز خود را حفظ کند.",
+    features: [
+      {
+        title: "پنبه با وزن متعادل",
+        description: "سطحی نرم با ایستایی کافی؛ نه بیش از حد نازک و نه سنگین.",
+      },
+      {
+        title: "فرم دقیق",
+        description: "تناسب شانه، آستین و قد برای یک سیلوئت آرام و قابل‌لایه‌پوشی تنظیم شده است.",
+      },
+      {
+        title: "دوخت ماندگار",
+        description: "یقه و لبه‌ها برای حفظ فرم در پوشیدن و شست‌وشوی مداوم تقویت شده‌اند.",
+      },
+    ],
+  },
+  trousers: {
+    label: "شلوار",
+    directory: "trousers",
+    sizes: ["36", "38", "40", "42", "44", "46"],
+    description:
+      "برش این شلوار میان حرکت آزاد و ظاهر مرتب تعادل می‌سازد و برای ساعت‌های طولانی روز طراحی شده است.",
+    features: [
+      {
+        title: "افت کنترل‌شده",
+        description: "پارچه در حرکت روان است و در حالت ایستاده خط اصلی شلوار را نگه می‌دارد.",
+      },
+      {
+        title: "ساختار راحت",
+        description: "فضای نشیمن و ران بدون حجم اضافه، آزادی حرکت روزمره را فراهم می‌کند.",
+      },
+      {
+        title: "جزئیات کم‌صدا",
+        description: "جیب‌ها، پیلی‌ها و درزها در خدمت فرم‌اند و ظاهر را شلوغ نمی‌کنند.",
+      },
+    ],
+  },
+  sneakers: {
+    label: "کتانی",
+    directory: "sneakers",
+    sizes: ["39", "40", "41", "42", "43", "44"],
+    description:
+      "یک کتانی روزمره با ساختار سبک و زیره‌ای پایدار که برای حرکت شهری و ترکیب‌های مینیمال ساخته شده است.",
+    features: [
+      {
+        title: "پایداری نرم",
+        description: "زیره، ضربه قدم‌ها را کنترل می‌کند و زیر پا حس بیش از حد حجیم ایجاد نمی‌کند.",
+      },
+      {
+        title: "فرم هماهنگ",
+        description: "پنجه، پنل‌ها و خط زیره به‌عنوان یک حجم ساده و یکپارچه طراحی شده‌اند.",
+      },
+      {
+        title: "برای تمام روز",
+        description: "فضای داخلی و گردش هوا برای رفت‌وآمد و پوشیدن طولانی تنظیم شده است.",
+      },
+    ],
+  },
+  shorts: {
+    label: "شلوارک",
+    directory: "shorts",
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    description:
+      "این مدل با فضای حرکت کافی و جزئیات ساده، یک انتخاب سبک برای روزهای گرم و استایل شهری است.",
+    features: [
+      {
+        title: "حرکت آزاد",
+        description: "فاق، ران و دهانه پا برای نشستن، راه رفتن و حرکت روزمره فضای کافی دارند.",
+      },
+      {
+        title: "پارچه تنفس‌پذیر",
+        description: "بافت سبک، جریان هوا را بهتر می‌کند و همچنان فرم خود را حفظ می‌کند.",
+      },
+      {
+        title: "ساختار مینیمال",
+        description: "جیب و درزها کاربردی‌اند و بدون شلوغی، شخصیت مدل را کامل می‌کنند.",
+      },
+    ],
+  },
+} as const;
+
+function createCategoryProducts(
+  categoryId: ProductCategoryId,
+  seeds: readonly ProductSeed[],
+): Product[] {
+  const details = categoryDetails[categoryId];
+
+  return seeds.map((seed) => {
+    const { palette, ...product } = seed;
+
+    return {
+      ...product,
+      category: details.label,
+      categoryId,
+      description: `${seed.tagline} ${details.description}`,
+      renderImage: `/products/${details.directory}/${seed.slug}.png`,
+      renderAlt: `${seed.name} سیف زون`,
+      colors: palettes[palette],
+      sizes: details.sizes,
+      features: details.features,
+    };
+  });
+}
+
+const tshirts = createCategoryProducts("tshirts", [
   {
     slug: "essential-oversized-tee",
     name: "تی‌شرت اورسایز Essential",
     shortName: "Essential Tee",
-    category: "تی‌شرت",
-    categoryId: "tshirts",
     tagline: "آزاد، متعادل و ساخته‌شده برای هر روز.",
-    description:
-      "یک تی‌شرت با فرم آزاد و خط شانه افتاده که به‌تنهایی یا در ترکیب با لایه‌های دیگر، ساده و دقیق می‌ایستد.",
     price: 1_890_000,
-    badge: "جدید",
-    coverImage: "/oversized-black-tee.png",
-    coverAlt: "تی‌شرت اورسایز مشکی Essential سیف زون",
-    coverPosition: "object-[50%_22%]",
-    colors: [
-      {
-        id: "black",
-        name: "مشکی",
-        swatch: "#171717",
-        image: "/oversized-black-tee.png",
-        imageAlt: "تی‌شرت اورسایز Essential به رنگ مشکی",
-        imagePosition: "object-[50%_22%]",
-      },
-      {
-        id: "ivory",
-        name: "استخوانی",
-        swatch: "#eee7da",
-        image: "/ivory-tee-black-trousers.png",
-        imageAlt: "تی‌شرت اورسایز Essential به رنگ استخوانی",
-        imagePosition: "object-[50%_28%]",
-      },
-      {
-        id: "stone",
-        name: "سنگی",
-        swatch: "#9f927f",
-        image: "/stone-tee-black-trousers.png",
-        imageAlt: "تی‌شرت اورسایز Essential به رنگ سنگی",
-        imagePosition: "object-[50%_24%]",
-      },
-    ],
-    sizes: ["S", "M", "L", "XL"],
-    features: [
-      {
-        title: "فرم آزاد",
-        description: "فضای بیشتر در تنه و آستین برای حرکت راحت و یک سیلوئت تمیز.",
-      },
-      {
-        title: "خط شانه افتاده",
-        description: "فرمی آرام که بدون حجم اضافه، ظاهر اورسایز را کامل می‌کند.",
-      },
-      {
-        title: "برای هر روز",
-        description: "طراحی ساده‌ای که با شلوار واید، جین یا لایه‌های دیگر هماهنگ می‌شود.",
-      },
-    ],
+    palette: "core",
+    badge: "پرفروش",
   },
+  {
+    slug: "core-heavy-tee",
+    name: "تی‌شرت سنگین Core",
+    shortName: "Core Heavy Tee",
+    tagline: "وزن بیشتر، خط تمیزتر.",
+    price: 2_190_000,
+    palette: "cool",
+    badge: "جدید",
+  },
+  {
+    slug: "drop-shoulder-tee",
+    name: "تی‌شرت Drop Shoulder",
+    shortName: "Drop Shoulder Tee",
+    tagline: "شانه افتاده، حجم آرام.",
+    price: 1_990_000,
+    palette: "earth",
+  },
+  {
+    slug: "boxy-crop-tee",
+    name: "تی‌شرت باکسی Crop",
+    shortName: "Boxy Crop Tee",
+    tagline: "کوتاه‌تر، عریض‌تر و دقیق‌تر.",
+    price: 1_890_000,
+    palette: "summer",
+  },
+  {
+    slug: "longline-tee",
+    name: "تی‌شرت لانگ‌لاین Flow",
+    shortName: "Flow Longline Tee",
+    tagline: "قد بلند با حرکت بی‌وقفه.",
+    price: 2_090_000,
+    palette: "core",
+  },
+  {
+    slug: "washed-tee",
+    name: "تی‌شرت شسته‌شده Fade",
+    shortName: "Fade Washed Tee",
+    tagline: "بافت آشنا، فرم تازه.",
+    price: 2_290_000,
+    palette: "earth",
+  },
+  {
+    slug: "pocket-tee",
+    name: "تی‌شرت جیب‌دار Utility",
+    shortName: "Utility Pocket Tee",
+    tagline: "یک جزئیات کاربردی، بدون شلوغی.",
+    price: 2_090_000,
+    palette: "cool",
+  },
+  {
+    slug: "split-hem-tee",
+    name: "تی‌شرت چاک‌دار Shift",
+    shortName: "Shift Split Tee",
+    tagline: "حرکت بیشتر در یک سیلوئت ساده.",
+    price: 2_190_000,
+    palette: "summer",
+  },
+  {
+    slug: "mock-neck-tee",
+    name: "تی‌شرت یقه‌ماک Form",
+    shortName: "Form Mock Tee",
+    tagline: "یقه‌ای بلندتر برای خطی مشخص‌تر.",
+    price: 2_190_000,
+    palette: "core",
+  },
+  {
+    slug: "raglan-relaxed-tee",
+    name: "تی‌شرت رگلان Arc",
+    shortName: "Arc Raglan Tee",
+    tagline: "درز منحنی، آزادی طبیعی شانه.",
+    price: 1_990_000,
+    palette: "sport",
+  },
+]);
+
+const trousers = createCategoryProducts("trousers", [
   {
     slug: "daily-wide-trousers",
     name: "شلوار واید Daily",
     shortName: "Daily Wide",
-    category: "شلوار",
-    categoryId: "trousers",
     tagline: "یک خط صاف، از کمر تا پایین.",
-    description:
-      "شلواری با برش واید و ایستایی روان که فاصله‌ی میان راحتی روزمره و ظاهر مرتب را از بین می‌برد.",
-    price: 2_490_000,
-    coverImage: "/ivory-tee-black-trousers.png",
-    coverAlt: "شلوار واید مشکی Daily سیف زون",
-    coverPosition: "object-[50%_54%]",
-    colors: [
-      {
-        id: "black",
-        name: "مشکی",
-        swatch: "#161616",
-        image: "/ivory-tee-black-trousers.png",
-        imageAlt: "شلوار واید Daily به رنگ مشکی",
-        imagePosition: "object-[50%_54%]",
-      },
-      {
-        id: "cream",
-        name: "کرم",
-        swatch: "#e7dece",
-        image: "/monochrome-duo-orange.png",
-        imageAlt: "شلوار واید Daily به رنگ کرم",
-        imagePosition: "object-[28%_52%]",
-      },
-    ],
-    sizes: ["36", "38", "40", "42", "44"],
-    features: [
-      {
-        title: "برش واید",
-        description: "خطی پیوسته و آزاد که در حرکت، فرم خود را حفظ می‌کند.",
-      },
-      {
-        title: "استایل انعطاف‌پذیر",
-        description: "از تی‌شرت ساده تا بافت و کت، بدون نیاز به ترکیب پیچیده.",
-      },
-      {
-        title: "راحتی طولانی",
-        description: "برای ساعت‌های طولانی روز و رفت‌وآمدهای شهری طراحی شده است.",
-      },
-    ],
+    price: 2_690_000,
+    palette: "core",
+    badge: "پرفروش",
   },
   {
-    slug: "ember-knit",
-    name: "پلیور بافت Ember",
-    shortName: "Ember Knit",
-    category: "بافت",
-    categoryId: "knitwear",
-    tagline: "گرمای رنگ، آرامش فرم.",
-    description:
-      "یک بافت آزاد با رنگ نارنجی عمیق؛ قطعه‌ای شاخص که باقی استایل را ساده نگه می‌دارد.",
-    price: 3_290_000,
-    badge: "منتخب",
-    coverImage: "/orange-knit-look.png",
-    coverAlt: "پلیور بافت نارنجی Ember سیف زون",
-    coverPosition: "object-[50%_22%]",
-    colors: [
-      {
-        id: "ember",
-        name: "نارنجی Ember",
-        swatch: "#b83c12",
-        image: "/orange-knit-look.png",
-        imageAlt: "پلیور بافت Ember به رنگ نارنجی",
-        imagePosition: "object-[50%_22%]",
-      },
-    ],
-    sizes: ["S/M", "L/XL"],
-    features: [
-      {
-        title: "بافت برجسته",
-        description: "سطحی با عمق بصری که در عین سادگی، شخصیت خودش را دارد.",
-      },
-      {
-        title: "حجم کنترل‌شده",
-        description: "آستین و تنه آزاد با تناسبی که همچنان مرتب دیده می‌شود.",
-      },
-      {
-        title: "رنگ شاخص",
-        description: "نارنجی گرم برای ترکیب با مشکی، کرم و رنگ‌های خنثی.",
-      },
-    ],
+    slug: "pleated-flow-trousers",
+    name: "شلوار پیلی‌دار Flow",
+    shortName: "Pleated Flow",
+    tagline: "پیلی عمیق با افتی روان.",
+    price: 2_890_000,
+    palette: "earth",
   },
-];
+  {
+    slug: "cargo-arc-trousers",
+    name: "شلوار کارگو Arc",
+    shortName: "Cargo Arc",
+    tagline: "کاربردی، بدون حجم اضافه.",
+    price: 3_190_000,
+    palette: "cool",
+    badge: "جدید",
+  },
+  {
+    slug: "straight-studio-trousers",
+    name: "شلوار راسته Studio",
+    shortName: "Studio Straight",
+    tagline: "یک برش مستقیم برای تمام هفته.",
+    price: 2_790_000,
+    palette: "core",
+  },
+  {
+    slug: "taper-move-trousers",
+    name: "شلوار تِیپرد Move",
+    shortName: "Move Tapered",
+    tagline: "فضا در ران، تمرکز در مچ.",
+    price: 2_590_000,
+    palette: "sport",
+  },
+  {
+    slug: "drawstring-ease-trousers",
+    name: "شلوار بنددار Ease",
+    shortName: "Ease Drawstring",
+    tagline: "راحتی خانگی با فرم شهری.",
+    price: 2_490_000,
+    palette: "summer",
+  },
+  {
+    slug: "double-pleat-trousers",
+    name: "شلوار دوپیلی Frame",
+    shortName: "Frame Double Pleat",
+    tagline: "ساختار بیشتر، حرکت همچنان آزاد.",
+    price: 3_090_000,
+    palette: "earth",
+  },
+  {
+    slug: "cropped-form-trousers",
+    name: "شلوار کراپ Form",
+    shortName: "Form Cropped",
+    tagline: "پایان دقیق روی مچ پا.",
+    price: 2_690_000,
+    palette: "cool",
+  },
+  {
+    slug: "utility-wide-trousers",
+    name: "شلوار واید Utility",
+    shortName: "Utility Wide",
+    tagline: "پنل‌های کاربردی در یک فرم یکپارچه.",
+    price: 3_190_000,
+    palette: "sport",
+  },
+  {
+    slug: "soft-tailored-trousers",
+    name: "شلوار تیلورد Soft",
+    shortName: "Soft Tailored",
+    tagline: "مرتب، اما هرگز خشک.",
+    price: 2_990_000,
+    palette: "summer",
+  },
+]);
+
+const sneakers = createCategoryProducts("sneakers", [
+  {
+    slug: "orbit-one-sneaker",
+    name: "کتانی Orbit One",
+    shortName: "Orbit One",
+    tagline: "حجم خالص برای قدم‌های روزمره.",
+    price: 3_890_000,
+    palette: "core",
+    badge: "پرفروش",
+  },
+  {
+    slug: "frame-low-sneaker",
+    name: "کتانی Frame Low",
+    shortName: "Frame Low",
+    tagline: "نزدیک به زمین، ساده و سبک.",
+    price: 3_690_000,
+    palette: "cool",
+  },
+  {
+    slug: "mono-court-sneaker",
+    name: "کتانی Mono Court",
+    shortName: "Mono Court",
+    tagline: "کلاسیک‌ترین فرم، با کمترین جزئیات.",
+    price: 3_790_000,
+    palette: "core",
+  },
+  {
+    slug: "axis-runner-sneaker",
+    name: "کتانی Axis Runner",
+    shortName: "Axis Runner",
+    tagline: "لایه‌های فنی برای ریتم شهر.",
+    price: 4_290_000,
+    palette: "sport",
+    badge: "جدید",
+  },
+  {
+    slug: "cloud-step-sneaker",
+    name: "کتانی Cloud Step",
+    shortName: "Cloud Step",
+    tagline: "زیره نرم، حضور پررنگ.",
+    price: 4_490_000,
+    palette: "summer",
+  },
+  {
+    slug: "line-02-sneaker",
+    name: "کتانی Line 02",
+    shortName: "Line 02",
+    tagline: "یک خط کشیده، بدون حواس‌پرتی.",
+    price: 3_990_000,
+    palette: "earth",
+  },
+  {
+    slug: "terra-low-sneaker",
+    name: "کتانی Terra Low",
+    shortName: "Terra Low",
+    tagline: "آماده مسیر، مناسب شهر.",
+    price: 4_390_000,
+    palette: "earth",
+  },
+  {
+    slug: "studio-slip-sneaker",
+    name: "کتانی Studio Slip",
+    shortName: "Studio Slip",
+    tagline: "بدون بند، بدون مکث.",
+    price: 3_490_000,
+    palette: "cool",
+  },
+  {
+    slug: "block-trainer-sneaker",
+    name: "کتانی Block Trainer",
+    shortName: "Block Trainer",
+    tagline: "حس رترو در یک حجم مدرن.",
+    price: 4_590_000,
+    palette: "sport",
+  },
+  {
+    slug: "pace-knit-sneaker",
+    name: "کتانی Pace Knit",
+    shortName: "Pace Knit",
+    tagline: "رویه منعطف، قدم سبک.",
+    price: 4_190_000,
+    palette: "summer",
+  },
+]);
+
+const shorts = createCategoryProducts("shorts", [
+  {
+    slug: "motion-shorts",
+    name: "شلوارک Motion",
+    shortName: "Motion Shorts",
+    tagline: "آزاد برای هر حرکت.",
+    price: 1_890_000,
+    palette: "sport",
+    badge: "پرفروش",
+  },
+  {
+    slug: "daily-pleat-shorts",
+    name: "شلوارک پیلی‌دار Daily",
+    shortName: "Daily Pleat Shorts",
+    tagline: "مرتب‌تر از معمول، همچنان راحت.",
+    price: 2_190_000,
+    palette: "core",
+  },
+  {
+    slug: "cargo-shorts",
+    name: "شلوارک کارگو Arc",
+    shortName: "Arc Cargo Shorts",
+    tagline: "جیب بیشتر، ظاهر آرام.",
+    price: 2_390_000,
+    palette: "earth",
+    badge: "جدید",
+  },
+  {
+    slug: "relaxed-sweat-shorts",
+    name: "شلوارک دورس Ease",
+    shortName: "Ease Sweat Shorts",
+    tagline: "نرم، سبک و آماده هر روز.",
+    price: 1_790_000,
+    palette: "summer",
+  },
+  {
+    slug: "tailored-shorts",
+    name: "شلوارک تیلورد Form",
+    shortName: "Form Tailored Shorts",
+    tagline: "خط اتو برای یک انتخاب دقیق‌تر.",
+    price: 2_290_000,
+    palette: "cool",
+  },
+  {
+    slug: "utility-shorts",
+    name: "شلوارک Utility",
+    shortName: "Utility Shorts",
+    tagline: "ساختار فنی، جزئیات کنترل‌شده.",
+    price: 2_390_000,
+    palette: "sport",
+  },
+  {
+    slug: "longline-shorts",
+    name: "شلوارک لانگ‌لاین Flow",
+    shortName: "Flow Longline Shorts",
+    tagline: "قد بلندتر، سیلوئت روان‌تر.",
+    price: 2_090_000,
+    palette: "core",
+  },
+  {
+    slug: "track-shorts",
+    name: "شلوارک Track",
+    shortName: "Track Shorts",
+    tagline: "سبک و سریع، بدون ظاهر ورزشی شلوغ.",
+    price: 1_890_000,
+    palette: "sport",
+  },
+  {
+    slug: "linen-ease-shorts",
+    name: "شلوارک لینن Ease",
+    shortName: "Linen Ease Shorts",
+    tagline: "خنک، طبیعی و بی‌تکلف.",
+    price: 2_290_000,
+    palette: "earth",
+  },
+  {
+    slug: "panel-shorts",
+    name: "شلوارک پنل Shift",
+    shortName: "Shift Panel Shorts",
+    tagline: "یک درز هندسی برای فرم متفاوت.",
+    price: 2_190_000,
+    palette: "cool",
+  },
+]);
+
+export const products: Product[] = [...tshirts, ...trousers, ...sneakers, ...shorts];
 
 export function getProduct(slug: string) {
   return products.find((product) => product.slug === slug);

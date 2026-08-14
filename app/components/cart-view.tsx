@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { formatPrice } from "../lib/products";
 import { useCart } from "./cart-provider";
+import { ProductRender } from "./product-render";
 
 export function CartView() {
   const { items, total, ready, removeItem, updateQuantity, clearCart } = useCart();
@@ -53,12 +53,11 @@ export function CartView() {
                 href={`/shop/${item.productSlug}`}
                 className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-[#e9e5de]"
               >
-                <Image
+                <ProductRender
                   src={item.image}
                   alt={item.imageAlt}
-                  fill
+                  color={item.colorSwatch}
                   sizes="160px"
-                  className="object-cover"
                 />
               </Link>
               <div className="flex min-w-0 flex-col justify-between py-1">

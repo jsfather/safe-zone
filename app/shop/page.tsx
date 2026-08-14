@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { ProductRender } from "../components/product-render";
+import { ShopCategoryLink, ShopCategoryScroll } from "../components/shop-category-navigation";
 import { SiteFooter } from "../components/site-footer";
 import { SiteHeader } from "../components/site-header";
-import { formatPrice, products } from "../lib/products";
+import { formatPrice, getDefaultProductColor, products } from "../lib/products";
 
 export const metadata: Metadata = {
   title: "فروشگاه",
-  description: "کالکشن آنلاین سیف زون؛ تی‌شرت، شلوار و بافت‌های مینیمال برای هر روز.",
+  description: "کالکشن آنلاین سیف زون؛ تی‌شرت، شلوار، کتانی و شلوارک‌های مینیمال.",
 };
 
 const categoryOptions = [
@@ -26,9 +28,7 @@ type ShopPageProps = {
 
 export default async function ShopPage({ searchParams }: ShopPageProps) {
   const { category } = await searchParams;
-  const selectedCategory = categoryOptions.some((option) => option.id === category)
-    ? category
-    : "all";
+  const selectedCategory = categoryOptions.find((option) => option.id === category)?.id ?? "all";
   const selectedLabel =
     categoryOptions.find((option) => option.id === selectedCategory)?.label ?? "همه";
   const visibleProducts =
@@ -40,6 +40,8 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
     <div className="min-h-screen bg-canvas text-ink">
       <SiteHeader />
       <main>
+        <ShopCategoryScroll categoryId={selectedCategory === "all" ? null : selectedCategory} />
+
         <section className="mx-auto max-w-5xl px-6 pt-24 pb-20 text-center md:pt-36 md:pb-28">
           <p className="text-sm font-medium text-accent">فروشگاه سیف زون</p>
           <h1 className="mt-5 text-5xl leading-[1.05] font-medium tracking-[-0.045em] text-balance md:text-8xl">
@@ -52,24 +54,24 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
           </p>
           <div className="mt-9 flex flex-wrap justify-center gap-2">
             {categoryOptions.map((option) => (
-              <Link
+              <ShopCategoryLink
                 key={option.id}
-                href={option.id === "all" ? "/shop" : `/shop?category=${option.id}`}
+                categoryId={option.id}
+                label={option.label}
                 className={`rounded-full border px-5 py-2.5 text-sm transition-colors ${
                   selectedCategory === option.id
                     ? "border-ink bg-ink text-white"
                     : "border-black/10 hover:border-black/30"
                 }`}
-              >
-                {option.label}
-              </Link>
+              />
             ))}
           </div>
         </section>
 
         <section
+          id="products"
           aria-labelledby="products-title"
-          className="mx-auto max-w-[1440px] px-5 pb-32 md:px-10 md:pb-44"
+          className="mx-auto max-w-[1440px] scroll-mt-28 px-5 pb-32 md:px-10 md:pb-44"
         >
           <div className="mb-8 flex items-end justify-between border-b border-black/10 pb-6">
             <div>
@@ -87,12 +89,12 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                 <article key={product.slug} className="group">
                   <Link href={`/shop/${product.slug}`} className="block">
                     <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] bg-[#e9e5de] md:rounded-[34px]">
-                      <Image
-                        src={product.coverImage}
-                        alt={product.coverAlt}
-                        fill
+                      <ProductRender
+                        src={product.renderImage}
+                        alt={product.renderAlt}
+                        color={getDefaultProductColor(product).swatch}
                         sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                        className={`object-cover transition-transform duration-700 ease-out group-hover:scale-[1.025] ${product.coverPosition}`}
+                        className="transition-transform duration-700 ease-out group-hover:scale-[1.025]"
                       />
                       {product.badge && (
                         <span className="absolute top-5 right-5 rounded-full bg-canvas/90 px-3 py-1.5 text-xs font-medium text-accent backdrop-blur">

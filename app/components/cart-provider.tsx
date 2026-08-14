@@ -13,6 +13,7 @@ export type CartItem = {
   price: number;
   image: string;
   imageAlt: string;
+  colorSwatch: string;
   quantity: number;
 };
 
@@ -29,7 +30,7 @@ type CartContextValue = {
   clearCart: () => void;
 };
 
-const CART_STORAGE_KEY = "safe-zone-cart";
+const CART_STORAGE_KEY = "safe-zone-cart-v2";
 const CartContext = createContext<CartContextValue | null>(null);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {

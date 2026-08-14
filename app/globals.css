@@ -32,6 +32,36 @@ body {
   font-family: var(--font-yekan-bakh-fa-en), Tahoma, Arial, sans-serif;
 }
 
+.product-render {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+}
+
+.product-render__color,
+.product-render__texture {
+  position: absolute;
+  inset: 0;
+}
+
+.product-render__color {
+  background-color: var(--product-color);
+  mask-image: var(--product-mask);
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-image: var(--product-mask);
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+}
+
+.product-render__texture {
+  filter: grayscale(1) contrast(1.15) brightness(1.08);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
 ::selection {
   color: #ffffff;
   background: #f4511e;

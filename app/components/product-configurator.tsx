@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
-import { formatPrice, type Product } from "../lib/products";
+import { formatPrice, getDefaultProductColor, type Product } from "../lib/products";
 import { useCart } from "./cart-provider";
+import { ProductRender } from "./product-render";
 
 type ProductConfiguratorProps = {
   product: Product;
@@ -11,13 +11,14 @@ type ProductConfiguratorProps = {
 
 export function ProductConfigurator({ product }: ProductConfiguratorProps) {
   const { addItem } = useCart();
-  const [selectedColorId, setSelectedColorId] = useState(product.colors[0].id);
+  const defaultColor = getDefaultProductColor(product);
+  const [selectedColorId, setSelectedColorId] = useState(defaultColor.id);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [fulfillment, setFulfillment] = useState<"delivery" | "pickup">("delivery");
   const [added, setAdded] = useState(false);
 
   const selectedColor =
-    product.colors.find((color) => color.id === selectedColorId) ?? product.colors[0];
+    product.colors.find((color) => color.id === selectedColorId) ?? defaultColor;
 
   function resetConfirmation() {
     setAdded(false);
@@ -36,8 +37,9 @@ export function ProductConfigurator({ product }: ProductConfiguratorProps) {
             size: selectedSize,
             fulfillment,
             price: product.price,
-            image: selectedColor.image,
-            imageAlt: selectedColor.imageAlt,
+            image: product.renderImage,
+            imageAlt: product.renderAlt,
+            colorSwatch: selectedColor.swatch,
           });
           setAdded(true);
         }
@@ -50,14 +52,12 @@ export function ProductConfigurator({ product }: ProductConfiguratorProps) {
       >
         <div className="lg:sticky lg:top-32">
           <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] bg-[#ebe7e0] md:rounded-[40px]">
-            <Image
-              key={selectedColor.id}
-              src={selectedColor.image}
-              alt={selectedColor.imageAlt}
-              fill
+            <ProductRender
+              src={product.renderImage}
+              alt={`${product.name} به رنگ ${selectedColor.name}`}
+              color={selectedColor.swatch}
               priority
               sizes="(min-width: 1024px) 58vw, 100vw"
-              className={`object-cover ${selectedColor.imagePosition}`}
             />
           </div>
 
@@ -77,12 +77,11 @@ export function ProductConfigurator({ product }: ProductConfiguratorProps) {
                     selectedColor.id === color.id ? "border-ink" : "border-transparent"
                   }`}
                 >
-                  <Image
-                    src={color.image}
+                  <ProductRender
+                    src={product.renderImage}
                     alt=""
-                    fill
+                    color={color.swatch}
                     sizes="20vw"
-                    className={`object-cover ${color.imagePosition}`}
                   />
                 </button>
               ))}
@@ -110,6 +109,9 @@ export function ProductConfigurator({ product }: ProductConfiguratorProps) {
             </h3>
             <p className="mt-3 text-ink/50">
               انتخاب فعلی: <span className="font-medium text-ink">{selectedColor.name}</span>
+            </p>
+            <p className="mt-2 text-sm leading-6 text-ink/40">
+              فرم، دوخت و زاویه محصول ثابت می‌ماند؛ فقط رنگ واقعی انتخاب‌شده تغییر می‌کند.
             </p>
 
             <div className="mt-7 grid gap-3 sm:grid-cols-2">
